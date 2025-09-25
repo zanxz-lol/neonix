@@ -1,0 +1,15 @@
+-I./include/
+-I./arch/amd64/include/
+-Werror
+-ffreestanding
+-fno-stack-protector
+-fno-stack-check
+-fno-lto
+-O0
+-m64
+-march=x86-64
+-mno-mmx
+-mno-red-zone
+-mcmodel=kernel
+-mno-80387
+-msse2
