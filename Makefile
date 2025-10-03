@@ -1,5 +1,6 @@
 export NAHO_ROOT = $(CURDIR)
-export KERN_OUT = $(CURDIR)/src/vmnaho.elf
+KERN := vmnaho.elf
+export KERN_OUT = $(CURDIR)/src/$(KERN)
 
 ISO_OUT := naho-bootable.iso
 
@@ -49,5 +50,5 @@ $(ISO_OUT):
 	@$(BOOTLOADER_DIR)/limine bios-install $(ISO_OUT)
 
 clean:
-	@rm -rf $(ISO_OUT) $(ISO_STRUCT_DIR)/EFI/BOOT/* $(ISO_STRUCT_DIR)/boot/vm-neonix.elf $(ISO_STRUCT_DIR)/boot/limine/*
+	@rm -rf $(ISO_OUT) $(ISO_STRUCT_DIR)/EFI/BOOT/* $(ISO_STRUCT_DIR)/boot/$(KERN) $(ISO_STRUCT_DIR)/boot/limine/*
 	@make clean --directory=$(NAHO_ROOT)/src

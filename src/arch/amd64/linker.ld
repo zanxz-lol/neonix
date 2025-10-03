@@ -1,5 +1,5 @@
 OUTPUT_FORMAT(elf64-x86-64)
-ENTRY(neonix_entry)
+ENTRY(naho_entry)
 
 PHDRS {
     limine_requests PT_LOAD;
@@ -9,7 +9,7 @@ PHDRS {
 }
 
 SECTIONS {
-    /* neonix's load address in virtual memory */
+    /* naho's load address in virtual memory */
     . = 0xffffffff80000000;
     kernel_start = .;
     .limine_requests : {

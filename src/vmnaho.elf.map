@@ -1,0 +1,606 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+__stack_chk_guard   0x8               libkern/security/stkchk.o
+boot_info           0xa0              arch/amd64/cpu/intr/handler.o
+
+Discarded input sections
+
+ .eh_frame      0x0000000000000000       0x70 arch/amd64/debugcon.o
+ .eh_frame      0x0000000000000000       0x50 arch/amd64/cpu/segm/gdt.o
+ .eh_frame      0x0000000000000000       0xc0 arch/amd64/cpu/intr/handler.o
+ .eh_frame      0x0000000000000000       0x70 arch/amd64/cpu/intr/idt.o
+ .eh_frame      0x0000000000000000       0x50 arch/amd64/timer/i8253.o
+ .eh_frame      0x0000000000000000      0x160 arch/amd64/mem/paging.o
+ .eh_frame      0x0000000000000000       0xf0 arch/amd64/apic/apic.o
+ .eh_frame      0x0000000000000000       0x70 arch/amd64/apic/i8259.o
+ .eh_frame      0x0000000000000000       0xc0 arch/amd64/acpi/acpi.o
+ .eh_frame      0x0000000000000000       0x58 arch/amd64/acpi/fadt.o
+ .eh_frame      0x0000000000000000       0xc0 arch/amd64/operations.o
+ .eh_frame      0x0000000000000000       0x38 core/test.o
+ .eh_frame      0x0000000000000000       0x90 core/printk.o
+ .eh_frame      0x0000000000000000       0x50 core/entry.o
+ .eh_frame      0x0000000000000000       0x70 core/initcall.o
+ .eh_frame      0x0000000000000000       0xb0 dev/video/limine_fbcon.o
+ .eh_frame      0x0000000000000000      0x100 dev/char/console.o
+ .eh_frame      0x0000000000000000       0xb0 libkern/list/list.o
+ .eh_frame      0x0000000000000000      0x530 libkern/printf/printf.o
+ .eh_frame      0x0000000000000000       0x68 libkern/hexdump/hexdump.o
+ .eh_frame      0x0000000000000000       0x60 libkern/string/memcpy.o
+ .eh_frame      0x0000000000000000       0x48 libkern/string/strncpy.o
+ .eh_frame      0x0000000000000000       0x48 libkern/string/strlen.o
+ .eh_frame      0x0000000000000000       0x50 libkern/string/strcpy.o
+ .eh_frame      0x0000000000000000       0x60 libkern/string/memcmp.o
+ .eh_frame      0x0000000000000000       0x38 libkern/string/memset.o
+ .eh_frame      0x0000000000000000       0x40 libkern/security/stkchk.o
+ .eh_frame      0x0000000000000000      0x180 libkern/security/ubsan.o
+ .eh_frame      0x0000000000000000       0x58 libkern/ring/ring.o
+ .eh_frame      0x0000000000000000      0x158 libkern/bitmap/bitmap.o
+ .eh_frame      0x0000000000000000      0x128 mem/pmm/alloc.o
+ .eh_frame      0x0000000000000000      0x210 mem/liballoc/liballoc.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0xffffffff80000000                . = 0xffffffff80000000
+                0xffffffff80000000                kernel_start = .
+
+.limine_requests
+                0xffffffff80000000      0x1e0
+ *(.limine_requests_start)
+ .limine_requests_start
+                0xffffffff80000000       0x20 core/entry.o
+ *(.limine_requests)
+ .limine_requests
+                0xffffffff80000020      0x1a8 core/entry.o
+ *(.limine_requests_end)
+ *fill*         0xffffffff800001c8        0x8 
+ .limine_requests_end
+                0xffffffff800001d0       0x10 core/entry.o
+
+.text           0xffffffff80001000     0xc8f3
+                0xffffffff80001000                text_start = .
+ *(.text)
+ .text          0xffffffff80001000      0x214 arch/amd64/cpu/asm/intr_stubs.o
+                0xffffffff80001000                intr_stub_start
+                0xffffffff80001030                intr_stub_end
+                0xffffffff80001057                intr_0
+                0xffffffff8000105e                intr_1
+                0xffffffff80001065                intr_2
+                0xffffffff8000106c                intr_3
+                0xffffffff80001073                intr_4
+                0xffffffff8000107a                intr_5
+                0xffffffff80001084                intr_6
+                0xffffffff8000108e                intr_7
+                0xffffffff80001098                intr_8
+                0xffffffff800010a0                intr_9
+                0xffffffff800010aa                intr_10
+                0xffffffff800010b2                intr_11
+                0xffffffff800010ba                intr_12
+                0xffffffff800010c2                intr_13
+                0xffffffff800010ca                intr_14
+                0xffffffff800010d2                intr_15
+                0xffffffff800010dc                intr_16
+                0xffffffff800010e6                intr_17
+                0xffffffff800010ee                intr_18
+                0xffffffff800010f8                intr_19
+                0xffffffff80001102                intr_20
+                0xffffffff8000110c                intr_21
+                0xffffffff80001114                intr_22
+                0xffffffff8000111e                intr_23
+                0xffffffff80001128                intr_24
+                0xffffffff80001132                intr_25
+                0xffffffff8000113c                intr_26
+                0xffffffff80001146                intr_27
+                0xffffffff80001150                intr_28
+                0xffffffff8000115a                intr_29
+                0xffffffff80001162                intr_30
+                0xffffffff8000116a                intr_31
+                0xffffffff80001174                intr_32
+                0xffffffff8000117e                intr_33
+                0xffffffff80001188                intr_34
+                0xffffffff80001192                intr_35
+                0xffffffff8000119c                intr_36
+                0xffffffff800011a6                intr_37
+                0xffffffff800011b0                intr_38
+                0xffffffff800011ba                intr_39
+                0xffffffff800011c4                intr_40
+                0xffffffff800011ce                intr_41
+                0xffffffff800011d8                intr_42
+                0xffffffff800011e2                intr_43
+                0xffffffff800011ec                intr_44
+                0xffffffff800011f6                intr_45
+                0xffffffff80001200                intr_46
+                0xffffffff8000120a                intr_47
+ *fill*         0xffffffff80001214        0xc 
+ .text          0xffffffff80001220       0x13 arch/amd64/cpu/asm/avx_features.o
+                0xffffffff80001220                sys_enable_avx
+ *fill*         0xffffffff80001233        0xd 
+ .text          0xffffffff80001240      0x274 arch/amd64/debugcon.o
+                0xffffffff80001240                arch_dbg_putc
+                0xffffffff80001280                arch_dbg_printf
+ *fill*         0xffffffff800014b4        0xc 
+ .text          0xffffffff800014c0      0x9ea arch/amd64/cpu/segm/gdt.o
+                0xffffffff800014c0                sys_gdt_init
+ *fill*         0xffffffff80001eaa        0x6 
+ .text          0xffffffff80001eb0      0x55a arch/amd64/cpu/intr/handler.o
+                0xffffffff80001eb0                intr_add_handler
+                0xffffffff80001fe0                intr_handler
+ *fill*         0xffffffff8000240a        0x6 
+ .text          0xffffffff80002410      0x6ab arch/amd64/cpu/intr/idt.o
+                0xffffffff80002410                sys_idt_init
+ *fill*         0xffffffff80002abb        0x5 
+ .text          0xffffffff80002ac0       0xb9 arch/amd64/timer/i8253.o
+                0xffffffff80002b10                sys_i8253_init
+ *fill*         0xffffffff80002b79        0x7 
+ .text          0xffffffff80002b80      0x716 arch/amd64/mem/paging.o
+                0xffffffff80002f70                arch_alloc_pages
+                0xffffffff80002fd0                arch_free_pages
+                0xffffffff80003010                sys_paging_init
+ *fill*         0xffffffff80003296        0xa 
+ .text          0xffffffff800032a0      0x74b arch/amd64/apic/apic.o
+                0xffffffff800032a0                lapic_set_base
+                0xffffffff800032e0                ioapic_redirect_irq
+                0xffffffff800033e0                lapic_send_eoi
+                0xffffffff80003450                sys_apic_init
+ *fill*         0xffffffff800039eb        0x5 
+ .text          0xffffffff800039f0       0xdb arch/amd64/apic/i8259.o
+                0xffffffff800039f0                read_pic_master_data
+                0xffffffff80003a20                read_pic_slave_data
+                0xffffffff80003a50                sys_disable_legacy_i8259
+ *fill*         0xffffffff80003acb        0x5 
+ .text          0xffffffff80003ad0      0x34b arch/amd64/acpi/acpi.o
+                0xffffffff80003bb0                sys_acpi_init
+ *fill*         0xffffffff80003e1b        0x5 
+ .text          0xffffffff80003e20      0x109 arch/amd64/acpi/fadt.o
+                0xffffffff80003e20                sys_acpi_enable
+ *fill*         0xffffffff80003f29        0x7 
+ .text          0xffffffff80003f30      0x217 arch/amd64/operations.o
+                0xffffffff80003f30                arch_disable_interrupts
+                0xffffffff80003f60                arch_enable_interrupts
+                0xffffffff80003f90                arch_die
+                0xffffffff80003fb0                arch_memset
+                0xffffffff80003ff0                arch_random
+                0xffffffff80004060                arch_early_init
+ *fill*         0xffffffff80004147        0x9 
+ .text          0xffffffff80004150       0x41 core/test.o
+ *fill*         0xffffffff80004191        0xf 
+ .text          0xffffffff800041a0      0x38f core/printk.o
+                0xffffffff800041a0                printk_copy_buffer_to_console
+                0xffffffff80004260                printk
+ *fill*         0xffffffff8000452f        0x1 
+ .text          0xffffffff80004530      0x468 core/entry.o
+                0xffffffff80004530                naho_entry
+ *fill*         0xffffffff80004998        0x8 
+ .text          0xffffffff800049a0      0x298 core/initcall.o
+                0xffffffff800049a0                initcalls_init
+ *fill*         0xffffffff80004c38        0x8 
+ .text          0xffffffff80004c40      0x7f9 dev/video/limine_fbcon.o
+                0xffffffff80005150                limine_fbcon_init
+ *fill*         0xffffffff80005439        0x7 
+ .text          0xffffffff80005440      0x614 dev/char/console.o
+                0xffffffff80005440                is_console_available
+                0xffffffff800054e0                register_console
+                0xffffffff800055e0                console_putc
+                0xffffffff800059b0                console_puts
+ *fill*         0xffffffff80005a54        0xc 
+ .text          0xffffffff80005a60      0x3a1 libkern/list/list.o
+                0xffffffff80005a60                list_init
+                0xffffffff80005ae0                list_append
+                0xffffffff80005d60                list_get_elems
+ *fill*         0xffffffff80005e01        0xf 
+ .text          0xffffffff80005e10     0x3934 libkern/printf/printf.o
+                0xffffffff80009340                printf_
+                0xffffffff80009420                sprintf_
+                0xffffffff800094f0                snprintf_
+                0xffffffff800095c0                vprintf_
+                0xffffffff80009620                vsnprintf_
+                0xffffffff80009670                fctprintf
+ *fill*         0xffffffff80009744        0xc 
+ .text          0xffffffff80009750      0x1d8 libkern/hexdump/hexdump.o
+                0xffffffff80009750                hexdump
+ *fill*         0xffffffff80009928        0x8 
+ .text          0xffffffff80009930       0xc5 libkern/string/memcpy.o
+                0xffffffff80009930                memcpy
+ *fill*         0xffffffff800099f5        0xb 
+ .text          0xffffffff80009a00       0x5d libkern/string/strncpy.o
+                0xffffffff80009a00                strncpy
+ *fill*         0xffffffff80009a5d        0x3 
+ .text          0xffffffff80009a60       0x76 libkern/string/strlen.o
+                0xffffffff80009a60                strlen
+ *fill*         0xffffffff80009ad6        0xa 
+ .text          0xffffffff80009ae0       0x75 libkern/string/strcpy.o
+                0xffffffff80009ae0                strcpy
+ *fill*         0xffffffff80009b55        0xb 
+ .text          0xffffffff80009b60       0xbc libkern/string/memcmp.o
+                0xffffffff80009b60                memcmp
+ *fill*         0xffffffff80009c1c        0x4 
+ .text          0xffffffff80009c20       0x3b libkern/string/memset.o
+                0xffffffff80009c20                memset
+ *fill*         0xffffffff80009c5b        0x5 
+ .text          0xffffffff80009c60       0x41 libkern/security/stkchk.o
+                0xffffffff80009c60                __stack_chk_guard_init
+                0xffffffff80009c70                __stack_chk_fail
+ *fill*         0xffffffff80009ca1        0xf 
+ .text          0xffffffff80009cb0      0x40e libkern/security/ubsan.o
+                0xffffffff80009d00                __ubsan_handle_add_overflow
+                0xffffffff80009d30                __ubsan_handle_sub_overflow
+                0xffffffff80009d60                __ubsan_handle_mul_overflow
+                0xffffffff80009d90                __ubsan_handle_divrem_overflow
+                0xffffffff80009dc0                __ubsan_handle_negate_overflow
+                0xffffffff80009df0                __ubsan_handle_pointer_overflow
+                0xffffffff80009e20                __ubsan_handle_shift_out_of_bounds
+                0xffffffff80009e50                __ubsan_handle_function_type_mismatch
+                0xffffffff80009e80                __ubsan_handle_load_invalid_value
+                0xffffffff80009eb0                __ubsan_handle_out_of_bounds
+                0xffffffff80009ee0                __ubsan_handle_type_mismatch
+                0xffffffff80009fd0                __ubsan_handle_vla_bound_not_positive
+                0xffffffff8000a000                __ubsan_handle_nonnull_return
+                0xffffffff8000a030                __ubsan_handle_nonnull_arg
+                0xffffffff8000a060                __ubsan_handle_builtin_unreachable
+                0xffffffff8000a090                __ubsan_handle_invalid_builtin
+ *fill*         0xffffffff8000a0be        0x2 
+ .text          0xffffffff8000a0c0      0x235 libkern/ring/ring.o
+                0xffffffff8000a0c0                ring_buffer_write
+ *fill*         0xffffffff8000a2f5        0xb 
+ .text          0xffffffff8000a300      0x57c libkern/bitmap/bitmap.o
+                0xffffffff8000a300                bitmap_test
+                0xffffffff8000a3d0                bitmap_set
+                0xffffffff8000a490                bitmap_unset
+                0xffffffff8000a550                bitmap_find_first_free_bit
+                0xffffffff8000a6b0                bitmap_find_free_bits
+ *fill*         0xffffffff8000a87c        0x4 
+ .text          0xffffffff8000a880      0x69c mem/pmm/alloc.o
+                0xffffffff8000a880                physmem_alloc_block
+                0xffffffff8000a8f0                physmem_alloc_blocks
+                0xffffffff8000a980                physmem_free_block
+                0xffffffff8000a9d0                physmem_free_blocks
+                0xffffffff8000aa40                init_physmem_allocator
+ *fill*         0xffffffff8000af1c        0x4 
+ .text          0xffffffff8000af20     0x29d3 mem/liballoc/liballoc.o
+                0xffffffff8000b140                liballoc_lock
+                0xffffffff8000b170                liballoc_unlock
+                0xffffffff8000b1a0                liballoc_alloc
+                0xffffffff8000b1e0                liballoc_free
+                0xffffffff8000b220                kmalloc
+                0xffffffff8000cbc0                kfree
+                0xffffffff8000d430                kcalloc
+                0xffffffff8000d4c0                krealloc
+
+.iplt           0xffffffff8000d8f3        0x0
+ .iplt          0xffffffff8000d8f3        0x0 arch/amd64/cpu/asm/intr_stubs.o
+
+.text.hot       0xffffffff8000d900       0x89
+ .text.hot      0xffffffff8000d900       0x89 arch/amd64/mem/paging.o
+                0xffffffff8000d900                virtmem_map
+
+.initcall.text  0xffffffff8000e000        0x8
+                0xffffffff8000e000                initcalls_start = .
+                0xffffffff8000e000                initcall0_start = .
+ *(.initcall0.init)
+                0xffffffff8000e000                initcall0_end = .
+                0xffffffff8000e000                initcall1_start = .
+ *(.initcall1.init)
+ .initcall1.init
+                0xffffffff8000e000        0x8 core/test.o
+                0xffffffff8000e008                initcall1_end = .
+                0xffffffff8000e008                initcall2_start = .
+ *(.initcall2.init)
+                0xffffffff8000e008                initcall2_end = .
+                0xffffffff8000e008                initcalls_end = .
+                0xffffffff8000e008                text_end = .
+
+.rodata         0xffffffff8000f000      0x570
+                0xffffffff8000f000                rodata_start = .
+ *(.rodata)
+ .rodata        0xffffffff8000f000       0x30 core/initcall.o
+ *fill*         0xffffffff8000f030       0x10 
+ .rodata        0xffffffff8000f040      0x120 dev/video/limine_fbcon.o
+ .rodata        0xffffffff8000f160      0x410 libkern/printf/printf.o
+                0xffffffff8000f570                rodata_end = .
+
+.rodata.str1.1  0xffffffff8000f570      0x8ff
+ .rodata.str1.1
+                0xffffffff8000f570       0x16 arch/amd64/debugcon.o
+ .rodata.str1.1
+                0xffffffff8000f586       0x2f arch/amd64/cpu/segm/gdt.o
+ .rodata.str1.1
+                0xffffffff8000f5b5       0x4d arch/amd64/cpu/intr/handler.o
+ .rodata.str1.1
+                0xffffffff8000f602       0x2f arch/amd64/cpu/intr/idt.o
+ .rodata.str1.1
+                0xffffffff8000f631       0x1e arch/amd64/timer/i8253.o
+ .rodata.str1.1
+                0xffffffff8000f64f       0x5e arch/amd64/mem/paging.o
+ .rodata.str1.1
+                0xffffffff8000f6ad       0x9f arch/amd64/apic/apic.o
+ .rodata.str1.1
+                0xffffffff8000f74c       0x76 arch/amd64/acpi/acpi.o
+ .rodata.str1.1
+                0xffffffff8000f7c2       0x57 arch/amd64/acpi/fadt.o
+ .rodata.str1.1
+                0xffffffff8000f819       0x36 arch/amd64/operations.o
+ .rodata.str1.1
+                0xffffffff8000f84f        0xe core/printk.o
+ .rodata.str1.1
+                0xffffffff8000f85d       0x32 core/entry.o
+ .rodata.str1.1
+                0xffffffff8000f88f       0x57 core/initcall.o
+ .rodata.str1.1
+                0xffffffff8000f8e6      0x277 dev/video/limine_fbcon.o
+ .rodata.str1.1
+                0xffffffff8000fb5d       0x13 dev/char/console.o
+ .rodata.str1.1
+                0xffffffff8000fb70       0x14 libkern/list/list.o
+ .rodata.str1.1
+                0xffffffff8000fb84       0x2a libkern/printf/printf.o
+ .rodata.str1.1
+                0xffffffff8000fbae       0x43 libkern/hexdump/hexdump.o
+ .rodata.str1.1
+                0xffffffff8000fbf1       0x18 libkern/string/memcpy.o
+ .rodata.str1.1
+                0xffffffff8000fc09       0x19 libkern/string/strncpy.o
+ .rodata.str1.1
+                0xffffffff8000fc22       0x18 libkern/string/strlen.o
+ .rodata.str1.1
+                0xffffffff8000fc3a       0x18 libkern/string/strcpy.o
+ .rodata.str1.1
+                0xffffffff8000fc52       0x18 libkern/string/memcmp.o
+ .rodata.str1.1
+                0xffffffff8000fc6a      0x17d libkern/security/ubsan.o
+ .rodata.str1.1
+                0xffffffff8000fde7       0x14 libkern/ring/ring.o
+ .rodata.str1.1
+                0xffffffff8000fdfb       0x18 libkern/bitmap/bitmap.o
+ .rodata.str1.1
+                0xffffffff8000fe13       0x44 mem/pmm/alloc.o
+ .rodata.str1.1
+                0xffffffff8000fe57       0x18 mem/liballoc/liballoc.o
+
+.rodata.str1.8  0xffffffff8000fe70      0x7f9
+ .rodata.str1.8
+                0xffffffff8000fe70      0x1f8 arch/amd64/cpu/intr/handler.o
+ .rodata.str1.8
+                0xffffffff80010068       0x47 arch/amd64/mem/paging.o
+ *fill*         0xffffffff800100af        0x1 
+ .rodata.str1.8
+                0xffffffff800100b0       0xfa arch/amd64/apic/apic.o
+ *fill*         0xffffffff800101aa        0x6 
+ .rodata.str1.8
+                0xffffffff800101b0       0x25 arch/amd64/apic/i8259.o
+ *fill*         0xffffffff800101d5        0x3 
+ .rodata.str1.8
+                0xffffffff800101d8       0x3f arch/amd64/acpi/acpi.o
+ *fill*         0xffffffff80010217        0x1 
+ .rodata.str1.8
+                0xffffffff80010218       0x28 arch/amd64/acpi/fadt.o
+ .rodata.str1.8
+                0xffffffff80010240       0x5e arch/amd64/operations.o
+ *fill*         0xffffffff8001029e        0x2 
+ .rodata.str1.8
+                0xffffffff800102a0       0x2c core/test.o
+ *fill*         0xffffffff800102cc        0x4 
+ .rodata.str1.8
+                0xffffffff800102d0      0x1bc core/entry.o
+ *fill*         0xffffffff8001048c        0x4 
+ .rodata.str1.8
+                0xffffffff80010490       0x9c dev/video/limine_fbcon.o
+ *fill*         0xffffffff8001052c        0x4 
+ .rodata.str1.8
+                0xffffffff80010530       0x21 libkern/security/stkchk.o
+ *fill*         0xffffffff80010551        0x7 
+ .rodata.str1.8
+                0xffffffff80010558       0x55 libkern/security/ubsan.o
+ *fill*         0xffffffff800105ad        0x3 
+ .rodata.str1.8
+                0xffffffff800105b0       0xb9 mem/pmm/alloc.o
+
+.rodata.cst8    0xffffffff80010670       0xa0
+ .rodata.cst8   0xffffffff80010670       0xa0 libkern/printf/printf.o
+
+.rodata.cst16   0xffffffff80010710       0x10
+ .rodata.cst16  0xffffffff80010710       0x10 libkern/printf/printf.o
+
+.rela.dyn       0xffffffff80010720        0x0
+ .rela.got      0xffffffff80010720        0x0 arch/amd64/cpu/asm/intr_stubs.o
+ .rela.iplt     0xffffffff80010720        0x0 arch/amd64/cpu/asm/intr_stubs.o
+ .rela.text     0xffffffff80010720        0x0 arch/amd64/cpu/asm/intr_stubs.o
+ .rela.text.hot
+                0xffffffff80010720        0x0 arch/amd64/cpu/asm/intr_stubs.o
+ .rela.data     0xffffffff80010720        0x0 arch/amd64/cpu/asm/intr_stubs.o
+
+.data           0xffffffff80011000     0x9504
+                0xffffffff80011000                data_start = .
+ *(.data)
+ .data          0xffffffff80011000      0x15e arch/amd64/debugcon.o
+ *fill*         0xffffffff8001115e        0x2 
+ .data          0xffffffff80011160      0xa37 arch/amd64/cpu/segm/gdt.o
+ *fill*         0xffffffff80011b97        0x9 
+ .data          0xffffffff80011ba0      0x542 arch/amd64/cpu/intr/handler.o
+ *fill*         0xffffffff800120e2       0x1e 
+ .data          0xffffffff80012100      0x460 arch/amd64/cpu/intr/idt.o
+ .data          0xffffffff80012560        0x0 arch/amd64/timer/i8253.o
+ .data          0xffffffff80012560      0x3f7 arch/amd64/mem/paging.o
+ *fill*         0xffffffff80012957        0x9 
+ .data          0xffffffff80012960      0x71a arch/amd64/apic/apic.o
+ .data          0xffffffff8001307a        0x0 arch/amd64/apic/i8259.o
+ *fill*         0xffffffff8001307a        0x6 
+ .data          0xffffffff80013080      0x21a arch/amd64/acpi/acpi.o
+ *fill*         0xffffffff8001329a        0x6 
+ .data          0xffffffff800132a0       0xba arch/amd64/acpi/fadt.o
+ .data          0xffffffff8001335a        0x0 arch/amd64/operations.o
+ .data          0xffffffff8001335a        0x0 core/test.o
+ *fill*         0xffffffff8001335a        0x6 
+ .data          0xffffffff80013360      0x2c8 core/printk.o
+ *fill*         0xffffffff80013628       0x18 
+ .data          0xffffffff80013640      0x454 core/entry.o
+ *fill*         0xffffffff80013a94        0xc 
+ .data          0xffffffff80013aa0      0x280 core/initcall.o
+ .data          0xffffffff80013d20     0x1780 dev/video/limine_fbcon.o
+ .data          0xffffffff800154a0      0x564 dev/char/console.o
+ *fill*         0xffffffff80015a04       0x1c 
+ .data          0xffffffff80015a20      0x3ba libkern/list/list.o
+ *fill*         0xffffffff80015dda        0x6 
+ .data          0xffffffff80015de0     0x104c libkern/printf/printf.o
+ *fill*         0xffffffff80016e2c       0x14 
+ .data          0xffffffff80016e40      0x13d libkern/hexdump/hexdump.o
+ *fill*         0xffffffff80016f7d        0x3 
+ .data          0xffffffff80016f80       0x79 libkern/string/memcpy.o
+ *fill*         0xffffffff80016ff9        0x7 
+ .data          0xffffffff80017000       0x33 libkern/string/strncpy.o
+ *fill*         0xffffffff80017033        0xd 
+ .data          0xffffffff80017040       0x39 libkern/string/strlen.o
+ *fill*         0xffffffff80017079        0x7 
+ .data          0xffffffff80017080       0x33 libkern/string/strcpy.o
+ *fill*         0xffffffff800170b3        0xd 
+ .data          0xffffffff800170c0       0x7c libkern/string/memcmp.o
+ .data          0xffffffff8001713c        0x0 libkern/string/memset.o
+ .data          0xffffffff8001713c        0x0 libkern/security/stkchk.o
+ *fill*         0xffffffff8001713c        0x4 
+ .data          0xffffffff80017140       0xaa libkern/security/ubsan.o
+ *fill*         0xffffffff800171ea       0x16 
+ .data          0xffffffff80017200      0x2c0 libkern/ring/ring.o
+ .data          0xffffffff800174c0      0x47c libkern/bitmap/bitmap.o
+ *fill*         0xffffffff8001793c        0x4 
+ .data          0xffffffff80017940      0x3ab mem/pmm/alloc.o
+ *fill*         0xffffffff80017ceb       0x15 
+ .data          0xffffffff80017d00     0x2804 mem/liballoc/liballoc.o
+                0xffffffff8001a504                data_end = .
+
+.got            0xffffffff8001a508        0x0
+ .got           0xffffffff8001a508        0x0 arch/amd64/cpu/asm/intr_stubs.o
+
+.got.plt        0xffffffff8001a508        0x0
+ .got.plt       0xffffffff8001a508        0x0 arch/amd64/cpu/asm/intr_stubs.o
+
+.igot.plt       0xffffffff8001a508        0x0
+ .igot.plt      0xffffffff8001a508        0x0 arch/amd64/cpu/asm/intr_stubs.o
+
+.bss            0xffffffff8001b000     0x36c8
+                0xffffffff8001b000                bss_start = .
+ *(.bss)
+ .bss           0xffffffff8001b000        0x0 arch/amd64/debugcon.o
+ .bss           0xffffffff8001b000       0x4a arch/amd64/cpu/segm/gdt.o
+ *fill*         0xffffffff8001b04a       0x16 
+ .bss           0xffffffff8001b060      0x800 arch/amd64/cpu/intr/handler.o
+ .bss           0xffffffff8001b860     0x100a arch/amd64/cpu/intr/idt.o
+ *fill*         0xffffffff8001c86a        0x6 
+ .bss           0xffffffff8001c870        0x8 arch/amd64/timer/i8253.o
+ *fill*         0xffffffff8001c878      0x788 
+ .bss           0xffffffff8001d000     0x1008 arch/amd64/mem/paging.o
+ *fill*         0xffffffff8001e008        0x8 
+ .bss           0xffffffff8001e010       0x40 arch/amd64/apic/apic.o
+ .bss           0xffffffff8001e050        0x0 arch/amd64/apic/i8259.o
+ .bss           0xffffffff8001e050       0x10 arch/amd64/acpi/acpi.o
+ .bss           0xffffffff8001e060        0x8 arch/amd64/acpi/fadt.o
+ .bss           0xffffffff8001e068        0x0 arch/amd64/operations.o
+ .bss           0xffffffff8001e068        0x0 core/test.o
+ *fill*         0xffffffff8001e068       0x18 
+ .bss           0xffffffff8001e080      0x400 core/printk.o
+ .bss           0xffffffff8001e480        0x0 core/entry.o
+ .bss           0xffffffff8001e480        0x0 core/initcall.o
+ .bss           0xffffffff8001e480       0x18 dev/video/limine_fbcon.o
+ *fill*         0xffffffff8001e498        0x8 
+ .bss           0xffffffff8001e4a0      0x120 dev/char/console.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/list/list.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/printf/printf.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/hexdump/hexdump.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/string/memcpy.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/string/strncpy.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/string/strlen.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/string/strcpy.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/string/memcmp.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/string/memset.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/security/stkchk.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/security/ubsan.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/ring/ring.o
+ .bss           0xffffffff8001e5c0        0x0 libkern/bitmap/bitmap.o
+ .bss           0xffffffff8001e5c0       0x10 mem/pmm/alloc.o
+ .bss           0xffffffff8001e5d0       0x38 mem/liballoc/liballoc.o
+ *(COMMON)
+ *fill*         0xffffffff8001e608       0x18 
+ COMMON         0xffffffff8001e620       0xa0 arch/amd64/cpu/intr/handler.o
+                0xffffffff8001e620                boot_info
+ COMMON         0xffffffff8001e6c0        0x8 libkern/security/stkchk.o
+                0xffffffff8001e6c0                __stack_chk_guard
+                0xffffffff8001e6c8                bss_end = .
+
+/DISCARD/
+ *(.eh_frame*)
+ *(.note .note.*)
+                0xffffffff8001e6c8                kernel_end = .
+LOAD arch/amd64/cpu/asm/intr_stubs.o
+LOAD arch/amd64/cpu/asm/avx_features.o
+LOAD arch/amd64/debugcon.o
+LOAD arch/amd64/cpu/segm/gdt.o
+LOAD arch/amd64/cpu/intr/handler.o
+LOAD arch/amd64/cpu/intr/idt.o
+LOAD arch/amd64/timer/i8253.o
+LOAD arch/amd64/mem/paging.o
+LOAD arch/amd64/apic/apic.o
+LOAD arch/amd64/apic/i8259.o
+LOAD arch/amd64/acpi/acpi.o
+LOAD arch/amd64/acpi/fadt.o
+LOAD arch/amd64/operations.o
+LOAD core/test.o
+LOAD core/printk.o
+LOAD core/entry.o
+LOAD core/initcall.o
+LOAD dev/video/limine_fbcon.o
+LOAD dev/char/console.o
+LOAD libkern/list/list.o
+LOAD libkern/printf/printf.o
+LOAD libkern/hexdump/hexdump.o
+LOAD libkern/string/memcpy.o
+LOAD libkern/string/strncpy.o
+LOAD libkern/string/strlen.o
+LOAD libkern/string/strcpy.o
+LOAD libkern/string/memcmp.o
+LOAD libkern/string/memset.o
+LOAD libkern/security/stkchk.o
+LOAD libkern/security/ubsan.o
+LOAD libkern/ring/ring.o
+LOAD libkern/bitmap/bitmap.o
+LOAD mem/pmm/alloc.o
+LOAD mem/liballoc/liballoc.o
+OUTPUT(/home/sushi/programming/myos/src/vmnaho.elf elf64-x86-64)
+
+.comment        0x0000000000000000       0x11
+ .comment       0x0000000000000000       0x11 arch/amd64/debugcon.o
+                                         0x12 (size before relaxing)
+ .comment       0x0000000000000011       0x12 arch/amd64/cpu/segm/gdt.o
+ .comment       0x0000000000000011       0x12 arch/amd64/cpu/intr/handler.o
+ .comment       0x0000000000000011       0x12 arch/amd64/cpu/intr/idt.o
+ .comment       0x0000000000000011       0x12 arch/amd64/timer/i8253.o
+ .comment       0x0000000000000011       0x12 arch/amd64/mem/paging.o
+ .comment       0x0000000000000011       0x12 arch/amd64/apic/apic.o
+ .comment       0x0000000000000011       0x12 arch/amd64/apic/i8259.o
+ .comment       0x0000000000000011       0x12 arch/amd64/acpi/acpi.o
+ .comment       0x0000000000000011       0x12 arch/amd64/acpi/fadt.o
+ .comment       0x0000000000000011       0x12 arch/amd64/operations.o
+ .comment       0x0000000000000011       0x12 core/test.o
+ .comment       0x0000000000000011       0x12 core/printk.o
+ .comment       0x0000000000000011       0x12 core/entry.o
+ .comment       0x0000000000000011       0x12 core/initcall.o
+ .comment       0x0000000000000011       0x12 dev/video/limine_fbcon.o
+ .comment       0x0000000000000011       0x12 dev/char/console.o
+ .comment       0x0000000000000011       0x12 libkern/list/list.o
+ .comment       0x0000000000000011       0x12 libkern/printf/printf.o
+ .comment       0x0000000000000011       0x12 libkern/hexdump/hexdump.o
+ .comment       0x0000000000000011       0x12 libkern/string/memcpy.o
+ .comment       0x0000000000000011       0x12 libkern/string/strncpy.o
+ .comment       0x0000000000000011       0x12 libkern/string/strlen.o
+ .comment       0x0000000000000011       0x12 libkern/string/strcpy.o
+ .comment       0x0000000000000011       0x12 libkern/string/memcmp.o
+ .comment       0x0000000000000011       0x12 libkern/string/memset.o
+ .comment       0x0000000000000011       0x12 libkern/security/stkchk.o
+ .comment       0x0000000000000011       0x12 libkern/security/ubsan.o
+ .comment       0x0000000000000011       0x12 libkern/ring/ring.o
+ .comment       0x0000000000000011       0x12 libkern/bitmap/bitmap.o
+ .comment       0x0000000000000011       0x12 mem/pmm/alloc.o
+ .comment       0x0000000000000011       0x12 mem/liballoc/liballoc.o

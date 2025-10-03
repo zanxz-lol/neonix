@@ -55,7 +55,7 @@ static void bootloader_collect_info(void) {
     }
 }
 
-void __noreturn __externally_visible neonix_entry(void) {
+void __noreturn __externally_visible naho_entry(void) {
     /* setup kernel stack protector */
     __stack_chk_guard_init(arch_random());
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {

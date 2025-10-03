@@ -100,7 +100,7 @@ static long long l_errorCount = 0;			///< Number of actual errors
 static long long l_possibleOverruns = 0;	///< Number of possible overruns
 
 
-/* neonix hooks */
+/* naho hooks */
 
 int liballoc_lock(void) {
     return 0;

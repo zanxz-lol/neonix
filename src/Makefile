@@ -9,7 +9,7 @@ CONFIG := $(SRC)/.config
 
 export KERNEL_VERSION = $(KERNEL_MAJOR_VERSION).$(KERNEL_MINOR_VERSION).$(KERNEL_PATCH_VERSION)
 
-CC_PREFIX ?= x86_64-elf-
+TOOLCHAIN_PREFIX ?= x86_64-elf-
 ARCH ?= amd64
 ASM ?= nasm
 
@@ -57,12 +57,12 @@ CC_OBJ := $(patsubst %.c, %.o, $(CC_SRC))
 ASM_OBJ := $(patsubst %.s, %.o, $(ASM_SRC))
 
 $(KERN_OUT): $(ASM_OBJ) $(CC_OBJ)
-	@$(CC_PREFIX)ld $(LD_FLAGS) $^ -o $@
+	@$(TOOLCHAIN_PREFIX)ld $(LD_FLAGS) $^ -o $@
 	@echo "[LD] - $@"
 	@echo "$(KERN_OUT) compiled successfully! :)"
 
 %.o: %.c
-	@$(CC_PREFIX)gcc $(CC_FLAGS) -c $< -o $@
+	@$(TOOLCHAIN_PREFIX)gcc $(CC_FLAGS) -c $< -o $@
 	@echo "[CC] - $<"
 
 %.o: %.s
