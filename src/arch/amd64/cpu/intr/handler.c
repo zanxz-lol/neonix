@@ -1,6 +1,6 @@
 #include <arch/operations.h>
-#include <neonix/printk.h>
-#include <neonix/kernel.h>
+#include <naho/printk.h>
+#include <naho/kernel.h>
 #include <x86_64/intr.h>
 #include <x86_64/apic.h>
 
@@ -42,14 +42,14 @@ void intr_add_handler(uint8_t intr, intr_handler_func func) {
 }
 
 void intr_handler(struct intr_stack_frame * regs) {
-    int rc;
-    rc = attempt_interrupt_handle(regs);
     if (regs->intr < 32) {
+        dump_info(regs);
+        int rc = attempt_interrupt_handle(regs);
         if (rc < 0) {
-            dump_info(regs);
             panic("Unhandled trap interrupt 0x%02x\n", regs->intr);
         }
     } else {
+        int rc = attempt_interrupt_handle(regs);
         if (rc < 0) {
             printk("Unimplemented interrupt 0x%02x\n", regs->intr);
         }

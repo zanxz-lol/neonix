@@ -1,15 +1,14 @@
 OUTPUT_FORMAT(elf64-x86-64)
 ENTRY(neonix_entry)
 
-PHDRS  {
+PHDRS {
     limine_requests PT_LOAD;
     text PT_LOAD;
     rodata PT_LOAD;
     data PT_LOAD;
 }
 
-SECTIONS
-{
+SECTIONS {
     /* neonix's load address in virtual memory */
     . = 0xffffffff80000000;
     kernel_start = .;
@@ -22,7 +21,6 @@ SECTIONS
     .text : ALIGN(CONSTANT(MAXPAGESIZE)) {
         text_start = .;
         *(.text)
-        text_end = .;
     } : text
 
     .initcall.text : ALIGN(CONSTANT(MAXPAGESIZE)) {
@@ -39,6 +37,7 @@ SECTIONS
         *(.initcall2.init)
         initcall2_end = .;
         initcalls_end = .;
+        text_end = .;
     } : text
 
     .rodata : ALIGN(CONSTANT(MAXPAGESIZE)) {
@@ -59,7 +58,7 @@ SECTIONS
         *(COMMON)
         bss_end = .;
     } : data
-    /* you're useless! }:) */
+    /* USELESS USELESS USELESS USELESS USELESS USELESS!! */
     /DISCARD/ : {
         *(.eh_frame*)
         *(.note .note.*)

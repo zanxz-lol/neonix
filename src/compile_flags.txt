@@ -12,4 +12,7 @@
 -mno-red-zone
 -mcmodel=kernel
 -mno-80387
--msse2
+-DKERNEL_MAJOR_VERSION=0
+-DKERNEL_MINOR_VERSION=0
+-DKERNEL_PATCH_VERSION=0
+-msse4

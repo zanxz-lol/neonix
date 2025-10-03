@@ -1,5 +1,5 @@
 #include <arch/operations.h>
-#include <neonix/mem.h>
+#include <naho/mem.h>
 
 /**  Durand's Amazing Super Duper Memory functions.  */
 

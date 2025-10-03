@@ -1,7 +1,7 @@
 #ifndef __FONT_VGA8X16_H
 #define __FONT_VGA8X16_H
 
-#include <neonix/console.h>
+#include <naho/console.h>
 #include <stdint.h>
 
 static uint8_t fontdata_vga8x16[] = {

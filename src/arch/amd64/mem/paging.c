@@ -1,16 +1,23 @@
-#include <neonix/proc.h>
+#include <naho/math.h>
+#include <naho/compiler.h>
+#include <naho/proc.h>
 #include <arch/operations.h>
-#include <neonix/printk.h>
-#include <neonix/kernel.h>
-#include <neonix/mem.h>
+#include <naho/printk.h>
+#include <naho/kernel.h>
+#include <naho/mem.h>
 #include <x86_64/mem.h>
 #include <x86_64/intr.h>
+#include <lib/limine.h>
+#include <lib/string.h>
 #include <lib/bool.h>
 #include <stddef.h>
 #include <stdint.h>
 
-static uint64_t * pml4;
-static uint64_t virt_offset;
+static uint64_t * pml4_t __align(4096);
+
+static uint64_t kernel_phys = 0;
+static uint64_t kernel_virt = 0;
+static uint64_t virt_offset = 0;
 
 static uint64_t get_fault_addr(void) {
     uint64_t cr2;
@@ -24,20 +31,46 @@ static void page_fault_handler(struct intr_stack_frame * regs) {
     panic("Page fault @ 0x%p\n", addr);
 }
 
+static void load_new_pml4(uint64_t pml4_addr) {
+    printk("Loading new PML4 table @ 0x%p\n", pml4_addr);
+    asm volatile("movq %0, %%cr3" :: "r"(pml4_addr));
+}
+
 void sys_paging_init(void) {
-    uint64_t raw_cr3 = 0;
-    asm volatile("movq %%cr3, %0" : "=r"(raw_cr3));
-    uint64_t pml4_phys = raw_cr3;
-    uint64_t pml4_virt = (boot_info.virt_offset + pml4_phys);
-    printk("PML4 physical address: 0x%p\n", pml4_phys);
-    printk("PML4 virtual address: 0x%p\n", pml4_virt);
-    pml4 = (uint64_t *)pml4_virt;
-    virt_offset = boot_info.virt_offset;
     intr_add_handler(X86_TRAP_PF, page_fault_handler);
+    kernel_phys = boot_info.krnl_phys_addr;
+    kernel_virt = boot_info.krnl_virt_addr;
+    virt_offset = boot_info.virt_offset;
+    pml4_t = arch_alloc_pages(1);
+    printk("Setting up page tables..\n");
+    /* map memory */
+    for(size_t i = 0; i < boot_info.mmap_entries; i++) {
+        struct limine_memmap_entry * entry = boot_info.mmap[i];
+        if (entry->type == LIMINE_MEMMAP_BAD_MEMORY || entry->type == LIMINE_MEMMAP_ACPI_NVS || entry->type == LIMINE_MEMMAP_RESERVED) {
+            continue;
+        }
+        uint64_t flags = (PAGE_PRESENT | PAGE_RW);
+        if (entry->type == LIMINE_MEMMAP_FRAMEBUFFER) {
+            flags |= (PAGE_WRITETHROUGH | PAGE_USERMODE);
+        }
+        virtmem_map(virt_offset + entry->base, entry->base, entry->length, flags);
+    }
+    /* map read-only sections */
+    uint64_t phys_base = kernel_phys + (boot_info.kernel_start - kernel_virt);
+    virtmem_map(boot_info.kernel_start, phys_base, boot_info.data_section_start - boot_info.kernel_start, PAGE_PRESENT);
+    /* map read-write sections */
+    phys_base = kernel_phys + (boot_info.data_section_start - kernel_virt);
+    virtmem_map(boot_info.data_section_start, phys_base, boot_info.kernel_end - boot_info.data_section_start, PAGE_RW | PAGE_PRESENT);
+    virtmem_map(virt_offset, 0, 1, 0);
+    /* load new pml4 */
+    load_new_pml4((uint64_t)pml4_t - virt_offset);
+    printk("New PML4 table loaded.\n");
 }
 
 void * arch_alloc_pages(size_t blocks) {
-    return (virt_offset + physmem_alloc_blocks(blocks)) ;
+    void * page_virt = (void *)(virt_offset + physmem_alloc_blocks(blocks));
+    memset(page_virt, 0, PAGE_SIZE);
+    return page_virt;
 }
 
 void arch_free_pages(void * ptr, size_t blocks) {
@@ -46,44 +79,45 @@ void arch_free_pages(void * ptr, size_t blocks) {
 }
 
 /*
-*   To test if im really going crazy, i gotta test out other peoples code
+* I'm not going crazy.. No...
 */
 
-static void _virtmem_map(uint64_t * pagedir, uint64_t virt_addr, uint64_t phys_addr, uint64_t flags) {
+static void _virtmem_map(uint64_t * pagedir, uint64_t virt_addr, const uint64_t phys_addr, const uint64_t flags) {
     if (virt_addr % PAGE_SIZE) {
-        printk("Unaligned address\n");
-        arch_die();
+        printk("0x%p is unaligned.\n", virt_addr);
+        return;
     }
     virt_addr = ADDR_48BIT(virt_addr);
-    uint32_t pml4_index = PML4_INDEX(virt_addr);
-    uint32_t pdp_index = PDP_INDEX(virt_addr);
-    uint32_t pd_index = PD_INDEX(virt_addr);
-    uint32_t pt_index = PT_INDEX(virt_addr);
-    if (!(pagedir[pml4_index] & PAGE_PRESENT)) {
-        size_t target = (size_t)physmem_alloc_block();
-        pagedir[pml4_index] = target | PAGE_PRESENT | PAGE_RW | PAGE_USERMODE;
+    size_t pml4_index = PML4_INDEX(virt_addr);
+    size_t pdp_index = PDP_INDEX(virt_addr);
+    size_t pd_index = PD_INDEX(virt_addr);
+    size_t pt_index = PT_INDEX(virt_addr);
+    /* level 4 */
+    if (TEST_PAGE_FLAG(pagedir[pml4_index], PAGE_PRESENT) == false) {
+        void * addr = physmem_alloc_block();
+        pagedir[pml4_index] = ((uint64_t)(addr) | PAGE_PRESENT | PAGE_RW | PAGE_USERMODE);
     }
-    size_t *pdp = (size_t *)(PAGE_GET_PHYS_ADDR(pagedir[pml4_index]) + boot_info.virt_offset);
-
-    if (!(pdp[pdp_index] & PAGE_PRESENT)) {
-        size_t target = (size_t)physmem_alloc_block();
-        pdp[pdp_index] = target | PAGE_PRESENT | PAGE_RW | PAGE_USERMODE;
+    /* level 3 */
+    uint64_t * pdp_t = (uint64_t *)(virt_offset + PAGE_GET_PHYS_ADDR(pagedir[pml4_index]));
+    if (TEST_PAGE_FLAG(pdp_t[pdp_index], PAGE_PRESENT) == false) {
+        void * addr = physmem_alloc_block();
+        pdp_t[pdp_index] = ((uint64_t)(addr) | PAGE_PRESENT | PAGE_RW | PAGE_USERMODE);
     }
-    size_t *pd = (size_t *)(PAGE_GET_PHYS_ADDR(pdp[pdp_index]) + boot_info.virt_offset);
-
-    if (!(pd[pd_index] & PAGE_PRESENT)) {
-        size_t target = (size_t)physmem_alloc_block();
-        pd[pd_index] = target | PAGE_PRESENT | PAGE_RW | PAGE_USERMODE;
+    /* level 2 */
+    uint64_t * pd_t = (uint64_t *)(virt_offset + PAGE_GET_PHYS_ADDR(pdp_t[pdp_index]));
+    if (TEST_PAGE_FLAG(pd_t[pd_index], PAGE_PRESENT) == false) {
+        void * addr = physmem_alloc_block();
+        pd_t[pd_index] = ((uint64_t)(addr) | PAGE_PRESENT | PAGE_RW | PAGE_USERMODE);
     }
-    size_t *pt = (size_t *)(PAGE_GET_PHYS_ADDR(pd[pd_index]) + boot_info.virt_offset);
-    if (!phys_addr) // todo: proper unmapping
-        pt[pt_index] = 0;
-    else
-        pt[pt_index] = (PAGE_PHYS_ADDR(phys_addr)) | PAGE_PRESENT | flags; // | PAGE_RW
-
+    /* level 1 */
+    uint64_t * pt = (uint64_t *)(virt_offset + PAGE_GET_PHYS_ADDR(pd_t[pd_index]));
+    pt[pt_index] = ((uint64_t)PAGE_PHYS_ADDR(phys_addr)) | flags;
     invalidate(virt_addr);
 }
 
-void virtmem_map(uint64_t virt_addr, uint64_t phys_addr, uint64_t flags) {
-    _virtmem_map(pml4, virt_addr, phys_addr, flags);
+void __hot virtmem_map(const uint64_t virt_addr, const uint64_t phys_addr, const size_t length, const uint64_t flags) {
+    size_t pages = DIV_CEILING(length, PAGE_SIZE);
+    for(size_t i = 0; i < pages; i++) {
+        _virtmem_map(pml4_t, virt_addr + (i * PAGE_SIZE), phys_addr + (i * PAGE_SIZE), flags);
+    }
 }

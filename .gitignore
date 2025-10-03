@@ -1,0 +1,12 @@
+# object files
+*.o
+
+# iso images
+*.iso
+
+# kernel n stuff
+*.elf
+
+# vscode stuff
+.vscode/
+.cache/

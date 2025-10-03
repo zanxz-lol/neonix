@@ -1,0 +1,9 @@
+#ifndef __NAHO_CONFIG_H
+#define __NAHO_CONFIG_H
+
+#define CONFIG_ARCH_AMD64 1
+#define CONFIG_NAHO_VIDEO 1
+#define CONFIG_NAHO_DEBUG 1
+#define CONFIG_DEBUGCON_ENABLE 1
+
+#endif

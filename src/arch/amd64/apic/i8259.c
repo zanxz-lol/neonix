@@ -1,4 +1,4 @@
-#include <neonix/printk.h>
+#include <naho/printk.h>
 #include <x86_64/pmio.h>
 
 #define PIC_MASTER_COMMAND_PORT 0x0020

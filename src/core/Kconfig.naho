@@ -1,0 +1,39 @@
+
+menu "CPU Architecture"
+
+choice ARCH
+    prompt "Target architecture"
+    default ARCH_AMD64
+    config ARCH_AMD64
+        bool "x86_64 (AMD64)"
+    config ARCH_AARCH64
+        bool "Aarch64 (ARM 64-bit)"
+endchoice
+
+endmenu
+
+config NAHO_FUNTIME
+    bool "Enable silly, but useless features"
+    help
+        You really don't need this, but if you wanna see some silly stuff on boot, turn this on.
+
+config NAHO_VIDEO
+    bool "Enable outputting to video framebufer"
+    help
+        Unless you're running this on a device without a screen, dont use this.
+
+config NAHO_DEBUG
+    bool "Enable debugging"
+    help
+        Only use this if you're a kernel developer
+
+menu "Debugging features"
+    depends on NAHO_DEBUG
+
+config DEBUGCON_ENABLE
+    depends on ARCH_AMD64
+    bool "Enable QEMU debugcon (E9 port hack) support"
+    help
+        Outputs early boot logs to the E9 PMIO port on x86 systems
+
+endmenu

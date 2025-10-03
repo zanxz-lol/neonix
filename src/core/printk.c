@@ -1,7 +1,7 @@
 #include <arch/operations.h>
-#include <neonix/console.h>
-#include <neonix/printk.h>
-#include <neonix/kernel.h>
+#include <naho/console.h>
+#include <naho/printk.h>
+#include <naho/kernel.h>
 #include <lib/string.h>
 #include <lib/printf.h>
 #include <lib/ring.h>
@@ -27,7 +27,7 @@ void printk(const char * fmt, ...) {
     va_start(ap, fmt);
     /* TODO: implement printk */
     char buf[1024];
-    vsnprintf_(buf, 1024, fmt, ap);
+    vsnprintf_(buf, 1023, fmt, ap);
     for(size_t i = 0; buf[i] != 0; i++) {
         if (is_console_available() == false) {
             arch_dbg_putc(buf[i]);

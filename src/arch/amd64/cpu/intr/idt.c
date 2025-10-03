@@ -1,4 +1,4 @@
-#include <neonix/printk.h>
+#include <naho/printk.h>
 #include <x86_64/common.h>
 #include <x86_64/intr.h>
 #include <stdint.h>

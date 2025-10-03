@@ -1,5 +1,5 @@
-#include <neonix/kernel.h>
-#include <neonix/printk.h>
+#include <naho/kernel.h>
+#include <naho/printk.h>
 #include <x86_64/acpi.h>
 #include <x86_64/apic.h>
 #include <x86_64/mem.h>
@@ -32,11 +32,14 @@ static void * acpi_search_for_table(char * signature) {
 
 int sys_acpi_init(void) {
     /* we need acpi to detect the APIC */
-    xsdp = (struct xsdp *)(boot_info.rsdp_ptr);
+    xsdp = (struct xsdp *)(boot_info.virt_offset + boot_info.rsdp_ptr);
+    virtmem_map(ALIGN_ADDR(boot_info.virt_offset + boot_info.rsdp_ptr), ALIGN_ADDR(boot_info.rsdp_ptr), 1, PAGE_PRESENT | PAGE_RW);
     if (xsdp->revision < 2) {
-        printk("NEONIX does not support devices with a ACPI version less than 2\n");
+        printk("Naho does not support devices with a ACPI version less than 2\n");
         return -1;
     }
+    printk("Setting up ACPI...\n");
+    virtmem_map(ALIGN_ADDR(boot_info.virt_offset + xsdp->xsdt_addr), ALIGN_ADDR(xsdp->xsdt_addr), 1, PAGE_PRESENT | PAGE_RW);
     xsdt = (struct xsdt *)(boot_info.virt_offset + xsdp->xsdt_addr);
     bool checksum_valid = is_checksum_valid(&xsdt->header);
     if (checksum_valid == false) {

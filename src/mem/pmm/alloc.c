@@ -1,8 +1,8 @@
 #include <arch/operations.h>
-#include <neonix/kernel.h>
-#include <neonix/printk.h>
-#include <neonix/math.h>
-#include <neonix/mem.h>
+#include <naho/kernel.h>
+#include <naho/printk.h>
+#include <naho/math.h>
+#include <naho/mem.h>
 #include <lib/string.h>
 #include <lib/common.h>
 #include <lib/bitmap.h>
@@ -70,15 +70,15 @@ void init_physmem_allocator(void) {
         if (boot_info.mmap[i]->type == LIMINE_MEMMAP_USABLE) {
             if (physmem_bitmap.size < boot_info.mmap[i]->length) {
                 entry = boot_info.mmap[i];
-                break;
+                /* dont break. we do NOT want this at the NULL address */
             }
         }
     }
-    printk("Total memory: %u bytes\n", boot_info.total_mem);
-    printk("Available memory: %u bytes\n", boot_info.avail_mem);
     if (entry == NULL) {
         panic("Not enough memeory to setup physical memory bitmap\n");
     }
+    printk("Total memory: %u bytes\n", boot_info.total_mem);
+    printk("Available memory: %u bytes\n", boot_info.avail_mem);
     physmem_bitmap.data = (uint8_t *)(boot_info.virt_offset + entry->base);
     memset(physmem_bitmap.data, 0, physmem_bitmap.size);
     printk("Physical memory bitmap located @ 0x%p\n", physmem_bitmap.data);
@@ -92,5 +92,6 @@ void init_physmem_allocator(void) {
     }
     physmem_set_region((uint64_t)(physmem_bitmap.data - boot_info.virt_offset), physmem_bitmap.size);
     /* should stay reserved (no null references) */
-    bitmap_set(&physmem_bitmap, 0);
+    physmem_set_region(0, 4096);
+    printk("PMM bitmap range: [0x%p - 0x%p]\n", physmem_bitmap.data, physmem_bitmap.data + physmem_bitmap.size);
 }

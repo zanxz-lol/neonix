@@ -1,11 +1,11 @@
 #ifndef __ARCH_OPS_H
 #define __ARCH_OPS_H
 
-#define CONFIG_NEONIX_FUNTIME 1
-
-#include <neonix/compiler.h>
+#include <naho/compiler.h>
 #include <stddef.h>
 #include <stdint.h>
+
+#include <config.h>
 
 /* normal stuff */
 
@@ -23,10 +23,25 @@ void arch_free_pages(void * ptr, size_t blocks);
 
 /* debugging */
 
-void arch_dbg_putc(const char ch);
+#ifdef CONFIG_NAHO_DEBUG
 
+#ifdef CONFIG_DEBUGCON_ENABLE
+
+void arch_dbg_putc(const char ch);
+void arch_dbg_printf(const char * fmt, ...);
+
+#else
+
+#define arch_dbg_putc(ch)
+#define arch_dbg_printf(fmt, ...)
+
+#endif /* CONFIG_DEBUGCON_ENABLE */
+
+#endif /* CONFIG_NAHO_DEBUG */
 /* fun stuff */
 
+#ifdef CONFIG_NAHO_FUNTIME
 void arch_bad_apple(void);
+#endif
 
 #endif

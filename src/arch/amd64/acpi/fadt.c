@@ -1,4 +1,4 @@
-#include <neonix/printk.h>
+#include <naho/printk.h>
 #include <x86_64/acpi.h>
 #include <x86_64/pmio.h>
 #include <lib/bool.h>
@@ -10,6 +10,7 @@ static inline bool is_acpi_enabled(void) {
 }
 
 void sys_acpi_enable(void * table) {
+    printk("Enabling ACPI...\n");
     fadt = table;
     if (is_acpi_enabled() == true) {
         printk("ACPI is already enabled by the BIOS :)\n");

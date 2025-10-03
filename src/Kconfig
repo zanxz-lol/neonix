@@ -1,0 +1,3 @@
+mainmenu "Naho $(KERNEL_VERSION) Kernel Configuration"
+
+source "core/Kconfig.naho"

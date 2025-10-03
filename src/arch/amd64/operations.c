@@ -1,6 +1,6 @@
 #include <arch/operations.h>
-#include <neonix/printk.h>
-#include <neonix/kernel.h>
+#include <naho/printk.h>
+#include <naho/kernel.h>
 #include <x86_64/timer.h>
 #include <x86_64/apic.h>
 #include <x86_64/gdt.h>
@@ -99,7 +99,7 @@ int arch_early_init(void) {
         printk("Your system doesn't support the latest SSE features.\n");
         return -1;
     }
-    /* TODO: add AVX features */
+    /* TODO: Add support for AVX features */
     printk("Enabling SSE features..\n");
     sys_enable_sse();
     /* necessary things */

@@ -1,7 +1,10 @@
-ISO_OUT := neonix-bootable.iso
-SCRIPTS_DIR := $(CURDIR)/scripts/
-BOOTLOADER_DIR := $(CURDIR)/bootloader
-ISO_STRUCT_DIR := $(CURDIR)/iso/
+export NAHO_ROOT = $(CURDIR)
+export KERN_OUT = $(CURDIR)/src/vmnaho.elf
+
+ISO_OUT := naho-bootable.iso
+
+BOOTLOADER_DIR := $(NAHO_ROOT)/bootloader
+ISO_STRUCT_DIR := $(NAHO_ROOT)/iso
 
 .PHONY: iso
 .PHONY: bootloader
@@ -9,13 +12,16 @@ ISO_STRUCT_DIR := $(CURDIR)/iso/
 bootloader: $(BOOTLOADER_DIR)/limine
 
 $(BOOTLOADER_DIR)/limine:
-	make -C $(BOOTLOADER_DIR)
+	@make -C $(BOOTLOADER_DIR)
 
-run: $(ISO_OUT)
+$(KERN_OUT):
+	@make -C $(NAHO_ROOT)/src
+
+run: $(KERN_OUT) $(ISO_OUT)
 	@qemu-system-x86_64 \
 		-cdrom $(ISO_OUT) \
 		-debugcon stdio \
-		-m 256M \
+		-m 8G \
 		-no-reboot \
 		-bios /usr/share/edk2/x64/OVMF.4m.fd \
 		-cpu qemu64,+sse4.1 \
@@ -23,10 +29,16 @@ run: $(ISO_OUT)
 		-audiodev pa,id=speaker \
 		-machine pcspk-audiodev=speaker
 
-iso:
+menuconfig:
+	@make menuconfig --directory=$(NAHO_ROOT)/src
+
+
 # this assumes that you have already compiled the kernel
-	@cp -v $(CURDIR)/src/vm-neonix.elf $(ISO_STRUCT_DIR)/boot/
-	@cp -v $(CURDIR)/config/limine.conf $(BOOTLOADER_DIR)/limine-bios.sys $(BOOTLOADER_DIR)/limine-bios-cd.bin \
+$(ISO_OUT):
+	@mkdir -p $(ISO_STRUCT_DIR)/boot/limine/
+	@mkdir -p $(ISO_STRUCT_DIR)/EFI/BOOT/
+	@cp -v $(KERN_OUT) $(ISO_STRUCT_DIR)/boot/
+	@cp -v $(NAHO_ROOT)/config/limine.conf $(BOOTLOADER_DIR)/limine-bios.sys $(BOOTLOADER_DIR)/limine-bios-cd.bin \
 		$(BOOTLOADER_DIR)/limine-uefi-cd.bin $(ISO_STRUCT_DIR)/boot/limine/
 	@cp -v $(BOOTLOADER_DIR)/BOOTX64.EFI $(ISO_STRUCT_DIR)/EFI/BOOT/
 	@xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
@@ -38,3 +50,4 @@ iso:
 
 clean:
 	@rm -rf $(ISO_OUT) $(ISO_STRUCT_DIR)/EFI/BOOT/* $(ISO_STRUCT_DIR)/boot/vm-neonix.elf $(ISO_STRUCT_DIR)/boot/limine/*
+	@make clean --directory=$(NAHO_ROOT)/src

@@ -1,7 +1,7 @@
-#include <neonix/compiler.h>
-#include <neonix/kernel.h>
-#include <neonix/printk.h>
-#include <neonix/init.h>
+#include <naho/compiler.h>
+#include <naho/kernel.h>
+#include <naho/printk.h>
+#include <naho/init.h>
 #include <lib/string.h>
 #include <stddef.h>
 
@@ -23,6 +23,10 @@ static inline void * entry_to_initcall(const int * offset) {
 }
 
 static void initcall_call_single(initcall_t func) {
+    /* bounds check */
+    if ((uintptr_t)func > (uintptr_t)&kernel_end) {
+        return;
+    }
     printk("Calling initcall @ 0x%p\n", func);
     int rc = func();
     printk("Initcall returned %d\n", rc);

@@ -1,7 +1,7 @@
 #ifndef __X86_64_ACPI_H
 #define __X86_64_ACPI_H
 
-#include <neonix/compiler.h>
+#include <naho/compiler.h>
 #include <stdint.h>
 
 struct acpi_table_entry {

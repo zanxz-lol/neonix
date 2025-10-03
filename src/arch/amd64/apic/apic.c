@@ -1,9 +1,10 @@
-#include <neonix/kernel.h>
-#include <neonix/printk.h>
-#include <neonix/mem.h>
+#include <naho/kernel.h>
+#include <naho/printk.h>
+#include <naho/mem.h>
 #include <x86_64/common.h>
 #include <x86_64/acpi.h>
 #include <x86_64/mmio.h>
+#include <x86_64/mem.h>
 #include <lib/hexdump.h>
 #include <lib/string.h>
 #include <lib/list.h>
@@ -97,6 +98,7 @@ void sys_apic_init(void * table) {
     madt = table;
     lapic_addr = madt->lapic_addr;
     printk("Local APIC MMIO address: 0x%p\n", lapic_addr);
+    virtmem_map(boot_info.virt_offset + lapic_addr, lapic_addr, PAGE_SIZE, PAGE_PRESENT | PAGE_RW);
     uint8_t * ptr = (uint8_t *)(madt + 1);
     uint8_t * end = (uint8_t *)madt + madt->header.length;
     while (ptr < end) {
@@ -110,6 +112,7 @@ void sys_apic_init(void * table) {
                 printk("Found IO-APIC. IO-APIC ID = %d, MMIO base = 0x%08zx, GSI = 0x%08zx\n", 
                        ioapic->id, ioapic->ioapic_addr, ioapic->gsi_base);
                 ioapic_addr = ioapic->ioapic_addr;
+                virtmem_map(boot_info.virt_offset + ioapic_addr, ioapic_addr, PAGE_SIZE, PAGE_PRESENT | PAGE_RW);
                 break;
             case 2:
                 list_append(&ioapic_intr_overrides, ptr);
@@ -122,7 +125,9 @@ void sys_apic_init(void * table) {
     printk("Total logical processors: %d\n", list_get_elems(&lapic_list));
     printk("Total IO-APIC interrupt overrides: %d\n", list_get_elems(&ioapic_intr_overrides));
     sys_lapic_init();
+    printk("Initialized local APIC :)\n");
     sys_ioapic_init();
+    printk("Initialized IO APIC :)\n");
     ioapic_set_entry(ioapic_redirect_irq(0), 32);
     printk("APIC has now been enabled\n");
 }

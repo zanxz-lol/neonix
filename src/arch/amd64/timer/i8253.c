@@ -1,14 +1,16 @@
-#include <neonix/printk.h>
-#include <neonix/proc.h>
-#ifdef CONFIG_NEONIX_FUNTIME
-#include <x86_64/bad_apple.h>
-#endif
+#include <naho/printk.h>
+#include <naho/proc.h>
 #include <x86_64/sched.h>
 #include <x86_64/intr.h>
 #include <x86_64/timer.h>
 #include <x86_64/pmio.h>
 #include <x86_64/apic.h>
 #include <stdint.h>
+#include <config.h>
+
+#ifdef CONFIG_NAHO_FUNTIME
+#include <x86_64/bad_apple.h>
+#endif
 
 #define PIT_FREQ_DIVISOR 1193180
 
@@ -22,7 +24,7 @@ static void i8253_configure_hz(uint16_t hz) {
     pmio_write8(0x40, divisor >> 8);
 }
 
-#ifdef CONFIG_NEONIX_FUNTIME
+#ifdef CONFIG_NAHO_FUNTIME
 
 static void play_sound(uint32_t freq) {
 	uint32_t divisor;
@@ -67,9 +69,6 @@ void arch_bad_apple(void) {
 
 static void timer_irq(struct intr_stack_frame * regs) {
     ticks++;
-    if (is_sched_enabled() == true) {
-        schedule(regs);
-    }
     lapic_send_eoi();
 }
 
