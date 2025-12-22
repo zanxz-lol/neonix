@@ -1,3 +1,4 @@
+<img src="https://github.com/user-attachments/assets/c42b3dd7-87a2-4a59-8faf-c9e422a6131a" width=256><b>
 # NEONIX: A Modern Alternative to UNIX-like Operating Systems
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
